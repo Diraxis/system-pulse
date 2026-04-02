@@ -1,37 +1,62 @@
-import psutil
-import os
-import subprocess
-import time
-from datetime import datetime
+# importing modules and classes first for use in the program
+import psutil                  # How this tool gets system usage stats
+import os                      # How this tool knows which operating system is being used
+import subprocess              # How this tool runs console commands
+import time                    # How this tool delays execution flow of the program
+from datetime import datetime  # How this tool gets timestamp data
 
-is_windows = os.name == 'nt'
-root_path = 'C:\\' if is_windows else '/'
-clear_command = 'cls' if is_windows else 'clear'
-log_file_path = "log.txt"
+# static variable assignments
+is_windows     = os.name == 'nt'
+root_path      = 'C:\\' if is_windows else '/'
+clear_terminal = 'cls' if is_windows else 'clear'
+log_file_path  = "log.txt"
 
-def get_system_usage_text():
+# program-specific functions
+def get_system_usage(): # gathers CPU, memory, and disk usage values
+    return {
+        "cpu"    : psutil.cpu_percent(interval = 0.5),
+        "memory" : psutil.virtual_memory().percent,
+        "disk"   : psutil.disk_usage(root_path).percent,
+    } # function returns usage values when called
 
-    # Data gathering behaviour (to be migrated into a separate function)
-    cpu_usage = psutil.cpu_percent(interval = 0.5)
-    memory_usage = psutil.virtual_memory().percent
-    disk_usage = psutil.disk_usage(root_path).percent
-
+def format_usage(stats): # imports the return values of "get_system_usage()" via the 'stats' variables to be formatted
     return (
-        f"CPU Usage: {cpu_usage}%\n"
-        f"Memory Usage: {memory_usage}%\n"
-        f"Disk Usage: {disk_usage}%"
-    )
-        
-while True:
+        f"CPU Usage: {stats['cpu']}% | "
+        f"Memory Usage: {stats['memory']}% | "
+        f"Disk Usage: {stats['disk']}%"
+    ) # function returns formatted strings (f-strings) representing system usage data
 
-    subprocess.run(clear_command, shell = True)
-
-    timestamp_str = datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
-    usage_text = get_system_usage_text()
-    log_entry = f"{timestamp_str}\n{usage_text}\n\n"
+# execution program
+# main monitoring loop
+try: 
+    while True: 
     
-    print(log_entry)
+        # OS-independent command
+        subprocess.run(clear_terminal, shell = True)
+        
+        # real-time f-string variable
+        timestamp_str = datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
+        # OS-independent command
+        subprocess.run(clear_terminal, shell = True)
+        
+        # real-time f-string variable
+        entry_time = datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
 
-    with open(file = log_file_path, mode = "a") as file:
-        file.write(log_entry)
-    time.sleep(2)
+        # data refreshes and data is formatted and held in a variable
+        stats = get_system_usage()
+        usage_str = format_usage(stats)
+
+        # formats timestamp and system usage as one package
+        entry_log = f"{entry_time} | {usage_str}"
+
+        # terminal and log outputs
+        print(entry_log)
+
+        with open(file = log_file_path, mode = 'a') as file:
+            file.write(entry_log + "\n")
+
+        # loop execution delay
+        time.sleep(2.5)
+
+except KeyboardInterrupt: # handle user interrupt (Ctrl+C) for clean exit
+    print("[System Pulse v2]: Program ended by user.\n")
