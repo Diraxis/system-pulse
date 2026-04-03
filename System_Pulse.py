@@ -1,5 +1,6 @@
 import psutil
 import time
+import os
 
 def print_system_stats():
 
@@ -13,6 +14,7 @@ def print_system_stats():
     print(f"Disk Usage: {disk.percent}%")
 
 while True:
+    os.system('cls')
     print_system_stats()
     time.sleep(2)
 
