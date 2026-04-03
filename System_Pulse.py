@@ -2,13 +2,13 @@ import psutil
 
 def print_system_stats():
 
-    local_cpu_use = psutil.cpu_percent()
-    print(f"CPU Usage: {local_cpu_use}%")
+    cpu_usage = psutil.cpu_percent(interval=1)
+    print(f"CPU Usage: {cpu_usage}%")
 
-    local_memory_use = psutil.virtual_memory()
-    print(f"Memory Usage: {local_memory_use.percent}%")
+    memory = psutil.virtual_memory()
+    print(f"Memory Usage: {memory.percent}%")
 
-    local_disk_use = psutil.disk_usage('C:')
-    print(f"Disk Usage: {local_disk_use.percent}%")
+    disk = psutil.disk_usage('C:')
+    print(f"Disk Usage: {disk.percent}%")
 
 print_system_stats()
