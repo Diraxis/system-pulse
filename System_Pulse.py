@@ -1,4 +1,5 @@
 import psutil
+import time
 
 def print_system_stats():
 
@@ -11,4 +12,9 @@ def print_system_stats():
     disk = psutil.disk_usage('C:')
     print(f"Disk Usage: {disk.percent}%")
 
-print_system_stats()
+while True:
+    print_system_stats()
+    time.sleep(2)
+
+# Known Issues:
+# 1. print functions output compounds endlessly on terminal
