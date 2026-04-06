@@ -18,5 +18,5 @@ while True:
     print_system_stats()
     time.sleep(2)
 
-# Known Issues:
-# 1. print functions output compounds endlessly on terminal
+# Known limitation:
+# Windows-specific terminal clear and disk path
