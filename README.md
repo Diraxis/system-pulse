@@ -68,4 +68,3 @@ It is part of building:
 **Diraxis**
 
 "Building systems I can understand, control, and evolve."
-# system-pulse
