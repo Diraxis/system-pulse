@@ -13,24 +13,22 @@ log_file_path  = "log.txt"
 
 # program-specific functions
 def get_system_usage(): # gathers CPU, memory, and disk usage values
-    
-    cpu_usage    = psutil.cpu_percent(interval = 0.5)
-    memory_usage = psutil.virtual_memory().percent
-    disk_usage   = psutil.disk_usage(root_path).percent
-    
-    return cpu_usage, memory_usage, disk_usage # function returns usage values when called
+    return {
+        "cpu"    : psutil.cpu_percent(interval = 0.5),
+        "memory" : psutil.virtual_memory().percent,
+        "disk"   : psutil.disk_usage(root_path).percent,
+    } # function returns usage values when called
 
-def format_usage(cpu_usage, memory_usage, disk_usage): # imports the return values of "get_system_usage()" to be formatted
-
+def format_usage(stats): # imports the return values of "get_system_usage()" via the 'stats' variables to be formatted
     return (
-        f"CPU Usage: {cpu_usage}%\n"
-        f"Memory Usage: {memory_usage}%\n"
-        f"Disk Usage: {disk_usage}%"
+        f"CPU Usage    : {stats['cpu']}%\n"
+        f"Memory Usage : {stats['memory']}%\n"
+        f"Disk Usage   : {stats['disk']}%"
     ) # function returns formatted strings (f-strings) representing system usage data
 
 # execution program
-try: # code that might fail 
-    while True:
+try: # main monitoring loop
+    while True: 
     
         # OS-independent command
         subprocess.run(clear_terminal, shell = True)
@@ -39,20 +37,20 @@ try: # code that might fail
         timestamp_str = datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
 
         # data refreshes and data is formatted and held in a variable
-        cpu_usage, memory_usage, disk_usage = get_system_usage()
-        usage_str = format_usage(cpu_usage, memory_usage, disk_usage)
+        stats = get_system_usage()
+        usage_str = format_usage(stats)
 
         # formats timestamp and system usage as one package
-        entry_log = f"{timestamp_str}\n{usage_str}\n\n"
+        entry_log = f"{timestamp_str}\n{usage_str}"
 
         # terminal and log outputs
         print(entry_log)
-        print(f"Writing to {log_file_path}")
 
         with open(file = log_file_path, mode = 'a') as file:
-            file.write(entry_log)
+            file.write(entry_log + "\n\n")
 
         # loop execution delay
         time.sleep(2.5)
-except KeyboardInterrupt: # exception handling for a specific code failure. (Ctrl+C)
+
+except KeyboardInterrupt: # handle user interrupt (Ctrl+C) for clean exit
     print("\n[System Pulse v2]: Program ended by user.\n")
