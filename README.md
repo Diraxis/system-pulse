@@ -1,70 +1,107 @@
 # System Pulse
 
-A lightweight CLI tool for monitoring system resource usage (CPU, memory, disk) and logging system state over time.
+A lightweight CLI tool for monitoring and analyzing system resource usage over time.
 
 ---
 
-## Purpose
+## Overview
 
-System Pulse is part of a broader effort to build **personal system control tools** — software that provides visibility, logging, and insight into machine behaviour.
-
----
-
-## Features (Current)
-
-* Real-time CPU, memory, and disk usage
-* Terminal output refresh loop
-* File-based logging (append mode)
-
+System Pulse captures CPU, memory, and disk usage in real time, logs system state to a file, and analyzes historical data to extract meaningful insights.
 
 ---
 
-## Planned Features
+## Features
 
-* Timestamped entries
-* Log analysis (average, peak usage)
-* Alerts (e.g., CPU > threshold)
-* Modular structure (separate data, logging, analysis)
-* CLI arguments (`--log`, `--analyze`)
+### Logging (Pulse Logger)
+
+* Real-time CPU, memory, and disk monitoring
+* Continuous refresh loop
+* Timestamped log entries written to file
+
+### Analysis (Pulse Analyzer)
+
+* Parses logged data
+* Computes:
+
+  * Average usage
+  * Peak usage
+* Summarizes system behaviour over time
 
 ---
 
-## Tech Stack
+## File Structure
 
-* Python
-* psutil
-* CLI (Linux/Windows compatible)
+```
+pulse_logger.py     # Collects and logs system data
+pulse_analyzer.py   # Parses logs and computes insights
+log.txt             # Generated at runtime
+```
 
 ---
 
 ## Usage
 
+### Run Logger
+
 ```bash
-python3 system_pulse.py
+python pulse_logger.py
+```
+
+* Press `Ctrl+C` to stop
+* Data is written to `log.txt`
+
+---
+
+### Run Analyzer
+
+```bash
+python pulse_analyzer.py
 ```
 
 ---
 
-## Project Status
+## Example Output
 
-Active development — early phase (focus: core functionality and reliability)
+```
+Entries logged : 120
+Average CPU    : 12.4%
+Peak CPU       : 68.2%
+Average Memory : 45.1%
+Peak Memory    : 72.3%
+Average Disk   : 61.0%
+Peak Disk      : 61.0%
+```
 
 ---
 
-## Why This Project Exists
+## Known Limitations
 
-This is not just a utility.
+* Log parsing depends on consistent log format
+* Concurrent logger instances may interleave entries
+* Editing the log file during execution can cause partial data loss
 
-It is part of building:
+---
 
-* system awareness
-* automation capability
-* system administration and networking (toward deeper system control)
+## Roadmap
+
+* [ ] Handle malformed log entries safely
+* [ ] Add timestamp-based analysis (time windows, trends)
+* [ ] Implement alert thresholds (e.g., CPU > 80%)
+* [ ] Improve modular structure (separate core components)
+
+---
+
+## Purpose
+
+System Pulse is part of a broader effort to build tools for:
+
+* system visibility
+* behavioural analysis over time
+* controlled, observable computing environments
 
 ---
 
 ## Author
 
-**Diraxis**
-
+Diraxis
 "Building systems I can understand, control, and evolve."
