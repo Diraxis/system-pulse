@@ -20,15 +20,27 @@ with open(file = log_file_path, mode = "r") as file:
         # breaks structured line into fields
         parts = line.split(" | ")
 
-        # extracts numerical values from each field
-        cpu_value = float(parts[1].replace("CPU Usage: ", "").replace("%", ""))
-        memory_value = float(parts[2].replace("Memory Usage: ", "").replace("%", ""))
-        disk_value = float(parts[3].replace("Disk Usage: ", "").replace("%", ""))
+        # skips malformed or non-numeric log entries
+        try:
 
-        # collect the extracted values and append them into a list variable
-        cpu_values.append(cpu_value)
-        memory_values.append(memory_value)
-        disk_values.append(disk_value)
+            # extracts numerical values from each field
+            cpu_value = float(parts[1].replace("CPU Usage: ", "").replace("%", ""))
+            memory_value = float(parts[2].replace("Memory Usage: ", "").replace("%", ""))
+            disk_value = float(parts[3].replace("Disk Usage: ", "").replace("%", ""))
+
+            # evaluates integrity before it collects the extracted values and append them into a list variable
+            if (0 <= cpu_value <= 100) and (0 <= memory_value <= 100) and (0 <= disk_value <= 100):
+                cpu_values.append(cpu_value)
+                memory_values.append(memory_value)
+                disk_values.append(disk_value)
+
+        except (IndexError, ValueError):
+            continue  # skips malformed lines
+
+# ends program if no data was processed
+if not cpu_values:
+    print("No data found.")
+    exit()
 
 # avg data of system usage
 avg_cpu = sum(cpu_values) / len(cpu_values)
