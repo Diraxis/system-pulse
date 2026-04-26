@@ -32,8 +32,10 @@ System Pulse captures CPU, memory, and disk usage in real time, logs system stat
 ## File Structure
 
 ```
-pulse_logger.py     # Collects and logs system data
+pulse_logger.py     # Collects system data and writes logs
 pulse_analyzer.py   # Parses logs and computes insights
+usage.py            # System usage data collection (CPU, memory, disk)
+log_utils.py        # Log formatting utilities
 log.txt             # Generated at runtime
 ```
 
