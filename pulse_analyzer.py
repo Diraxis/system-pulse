@@ -1,5 +1,4 @@
-# file interaction location
-log_file_path = "log.txt"
+from pulse_logger import log_file_path
 
 # list variables assigned
 cpu_values = []

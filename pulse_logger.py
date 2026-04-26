@@ -1,30 +1,15 @@
 # importing modules and classes first for use in the program
-import psutil                  # How this tool gets system usage stats
-import os                      # How this tool knows which operating system is being used
-import subprocess              # How this tool runs console commands
-import time                    # How this tool delays execution flow of the program
-from datetime import datetime  # How this tool gets timestamp data
+import subprocess                   # How this tool runs console commands
+import time                         # How this tool delays execution flow of the program
+from datetime import datetime       # How this tool gets timestamp data
+
+# importing functions and variables from other programs
+from usage import get_system_usage, is_windows
+from log_utils import format_usage, stats, usage_str
 
 # static variable assignments
-is_windows     = os.name == 'nt'
-root_path      = 'C:\\' if is_windows else '/'
 clear_terminal = 'cls' if is_windows else 'clear'
 log_file_path  = "log.txt"
-
-# program-specific functions
-def get_system_usage(): # gathers CPU, memory, and disk usage values
-    return {
-        "cpu"    : psutil.cpu_percent(interval = 0.5),
-        "memory" : psutil.virtual_memory().percent,
-        "disk"   : psutil.disk_usage(root_path).percent,
-    } # function returns usage values when called
-
-def format_usage(stats): # imports the return values of "get_system_usage()" via the 'stats' variables to be formatted
-    return (
-        f"CPU Usage: {stats['cpu']}% | "
-        f"Memory Usage: {stats['memory']}% | "
-        f"Disk Usage: {stats['disk']}%"
-    ) # function returns formatted strings (f-strings) representing system usage data
 
 # execution program
 # main monitoring loop
