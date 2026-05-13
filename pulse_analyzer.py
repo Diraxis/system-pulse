@@ -1,3 +1,4 @@
+from datetime import datetime
 from log_utils import parse_log_line
 
 log_file_path = "log.txt"
@@ -24,7 +25,13 @@ max_cpu = max(entry["cpu"] for entry in entries)
 max_memory = max(entry["memory"] for entry in entries)
 max_disk = max(entry["disk"] for entry in entries)
 
+timestamps = [datetime.strptime(entry["timestamp"], "%Y-%m-%d, %H:%M:%S") for entry in entries]
+start_time = min(timestamps)
+end_time = max(timestamps)
+duration = end_time - start_time
+
 # prints summary statistics to the terminal
+print(f"Monitoring duration : {duration}")
 print(f"Entries logged : {len(entries)}")
 print(f"Average CPU    : {avg_cpu:.1f}%")
 print(f"Peak CPU       : {max_cpu:.1f}%")
