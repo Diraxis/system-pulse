@@ -5,7 +5,7 @@ from datetime import datetime       # How this tool gets timestamp data
 
 # importing functions and variables from other programs
 from usage import get_system_usage, is_windows
-from log_utils import format_usage, stats, usage_str
+from log_utils import format_usage, stats
 
 # static variable assignments
 clear_terminal = 'cls' if is_windows else 'clear'

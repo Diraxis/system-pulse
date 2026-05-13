@@ -1,6 +1,9 @@
-from pulse_logger import log_file_path
+from log_utils import parse_log_line
+
+log_file_path = "log.txt"
 
 # list variables assigned
+entries = []
 cpu_values = []
 memory_values = []
 disk_values = []
@@ -11,28 +14,13 @@ with open(file = log_file_path, mode = "r") as file:
     # reads every line
     for line in file:
 
-        # cleans whitespace and skips empty lines
-        line = line.strip()
-        if not line:
-            continue
-        
-        # breaks structured line into fields
-        parts = line.split(" | ")
-
-        # skips malformed or non-numeric log entries
+        entries = parse_log_line(line) # calls the function to parse the log line and extract values
         try:
-
-            # extracts numerical values from each field
-            cpu_value = float(parts[1].replace("CPU Usage: ", "").replace("%", ""))
-            memory_value = float(parts[2].replace("Memory Usage: ", "").replace("%", ""))
-            disk_value = float(parts[3].replace("Disk Usage: ", "").replace("%", ""))
-
             # evaluates integrity before it collects the extracted values and append them into a list variable
-            if (0 <= cpu_value <= 100) and (0 <= memory_value <= 100) and (0 <= disk_value <= 100):
-                cpu_values.append(cpu_value)
-                memory_values.append(memory_value)
-                disk_values.append(disk_value)
-
+            if (0 <= entries["cpu"] <= 100) and (0 <= entries["memory"] <= 100) and (0 <= entries["disk"] <= 100):
+                cpu_values.append(entries["cpu"])
+                memory_values.append(entries["memory"])
+                disk_values.append(entries["disk"])
         except (IndexError, ValueError):
             continue  # skips malformed lines
 
