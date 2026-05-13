@@ -15,6 +15,11 @@ with open(file = log_file_path, mode = "r") as file:
         except ValueError as e: # handles exceptions raised by parse_log_line() and prints error message
             print(f"Error parsing line: {e}")
 
+# checks if any valid entries were parsed, exits if none found
+if not entries:
+    print("No valid data found.")
+    exit()
+
 # calculates average system usage values from parsed log entries
 avg_cpu = sum(entry["cpu"] for entry in entries) / len(entries)
 avg_memory = sum(entry["memory"] for entry in entries) / len(entries)
@@ -39,10 +44,10 @@ seconds = total_seconds % 60
 
 # prints summary statistics to the terminal
 print(f"Monitoring duration : {hours}h {minutes}m {seconds}s")
-print(f"Entries logged : {len(entries)}")
-print(f"Average CPU    : {avg_cpu:.1f}%")
-print(f"Peak CPU       : {max_cpu:.1f}%")
-print(f"Average Memory : {avg_memory:.1f}%")
-print(f"Peak Memory    : {max_memory:.1f}%")
-print(f"Average Disk   : {avg_disk:.1f}%")
-print(f"Peak Disk      : {max_disk:.1f}%")
+print(f"Entries logged      : {len(entries)}")
+print(f"Average CPU         : {avg_cpu:.1f}%")
+print(f"Peak CPU            : {max_cpu:.1f}%")
+print(f"Average Memory      : {avg_memory:.1f}%")
+print(f"Peak Memory         : {max_memory:.1f}%")
+print(f"Average Disk        : {avg_disk:.1f}%")
+print(f"Peak Disk           : {max_disk:.1f}%")
