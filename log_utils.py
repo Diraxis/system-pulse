@@ -28,7 +28,7 @@ def parse_log_line(line):
     cpu_str = parts[1].replace("CPU Usage: ", "").replace("%", "")
     memory_str = parts[2].replace("Memory Usage: ", "").replace("%", "")
     disk_str = parts[3].replace("Disk Usage: ", "").replace("%", "")
-
+    
     # attempts to convert cleaned usage values to floats, raises exceptions for non-numeric values
     try:
         cpu_value = float(cpu_str)
@@ -36,6 +36,10 @@ def parse_log_line(line):
         disk_value = float(disk_str)
     except ValueError:
         raise ValueError("Non-numeric log values")
+
+    # validates usage values are within expected ranges, raises exceptions for out-of-range values
+    if not (0 <= cpu_value <= 100) and (0 <= memory_value <= 100) and (0 <= disk_value <= 100):
+        raise ValueError("Invalid usage values")
 
     return {
         "timestamp": timestamp,

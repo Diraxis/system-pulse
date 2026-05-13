@@ -2,45 +2,30 @@ from log_utils import parse_log_line
 
 log_file_path = "log.txt"
 
-# list variables assigned
+# list to hold parsed log entries
 entries = []
-cpu_values = []
-memory_values = []
-disk_values = []
 
-# access file
+# reads log file and attempts to parse each line, handling exceptions for malformed lines
 with open(file = log_file_path, mode = "r") as file:
-    
-    # reads every line
-    for line in file:
-
-        entries = parse_log_line(line) # calls the function to parse the log line and extract values
+    for line in file: # reads every line in the log file
         try:
-            # evaluates integrity before it collects the extracted values and append them into a list variable
-            if (0 <= entries["cpu"] <= 100) and (0 <= entries["memory"] <= 100) and (0 <= entries["disk"] <= 100):
-                cpu_values.append(entries["cpu"])
-                memory_values.append(entries["memory"])
-                disk_values.append(entries["disk"])
-        except (IndexError, ValueError):
-            continue  # skips malformed lines
+            entry = parse_log_line(line) # attempts to parse line using function from log_utils.py
+            entries.append(entry) # adds parsed data to list of entries
+        except ValueError as e: # handles exceptions raised by parse_log_line() and prints error message
+            print(f"Error parsing line: {e}")
 
-# ends program if no data was processed
-if not cpu_values:
-    print("No data found.")
-    exit()
+# calculates average system usage values from parsed log entries
+avg_cpu = sum(entry["cpu"] for entry in entries) / len(entries)
+avg_memory = sum(entry["memory"] for entry in entries) / len(entries)
+avg_disk = sum(entry["disk"] for entry in entries) / len(entries)
 
-# avg data of system usage
-avg_cpu = sum(cpu_values) / len(cpu_values)
-avg_memory = sum(memory_values) / len(memory_values)
-avg_disk = sum(disk_values) / len(disk_values)
+# calculates peak system usage values from parsed log entries
+max_cpu = max(entry["cpu"] for entry in entries)
+max_memory = max(entry["memory"] for entry in entries)
+max_disk = max(entry["disk"] for entry in entries)
 
-# max data of system usage
-max_cpu = max(cpu_values)
-max_memory = max(memory_values)
-max_disk = max(disk_values)
-
-# analytical readout
-print(f"Entries logged : {len(cpu_values)}")
+# prints summary statistics to the terminal
+print(f"Entries logged : {len(entries)}")
 print(f"Average CPU    : {avg_cpu:.1f}%")
 print(f"Peak CPU       : {max_cpu:.1f}%")
 print(f"Average Memory : {avg_memory:.1f}%")
