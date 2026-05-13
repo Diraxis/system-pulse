@@ -1,7 +1,3 @@
-# imports function to get system usage stats
-from usage import get_system_usage
-stats = get_system_usage()
-
 def format_usage(stats): # imports the return values of "get_system_usage()" via the 'stats' variables to be formatted
     return (
         f"CPU Usage: {stats['cpu']}% | "
@@ -38,7 +34,7 @@ def parse_log_line(line):
         raise ValueError("Non-numeric log values")
 
     # validates usage values are within expected ranges, raises exceptions for out-of-range values
-    if not (0 <= cpu_value <= 100) and (0 <= memory_value <= 100) and (0 <= disk_value <= 100):
+    if not all (0 <= value <= 100 for value in [cpu_value, memory_value, disk_value]):
         raise ValueError("Invalid usage values")
 
     return {
