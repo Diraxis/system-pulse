@@ -21,6 +21,7 @@ System Pulse captures CPU, memory, and disk usage in real time, logs system stat
 ### Analysis (Pulse Analyzer)
 
 * Parses logged data
+* Handles malformed log entries safely
 * Computes:
 
   * Average usage
@@ -86,7 +87,6 @@ Peak Disk      : 61.0%
 
 ## Roadmap
 
-* [ ] Handle malformed log entries safely
 * [ ] Add timestamp-based analysis (time windows, trends)
 * [ ] Implement alert thresholds (e.g., CPU > 80%)
 * [ ] Improve modular structure (separate core components)

@@ -25,13 +25,14 @@ max_cpu = max(entry["cpu"] for entry in entries)
 max_memory = max(entry["memory"] for entry in entries)
 max_disk = max(entry["disk"] for entry in entries)
 
+# calculates monitoring duration from timestamps in parsed log entries
 timestamps = [datetime.strptime(entry["timestamp"], "%Y-%m-%d, %H:%M:%S") for entry in entries]
 start_time = min(timestamps)
 end_time = max(timestamps)
 duration = end_time - start_time
 
+# converts duration to hours, minutes, and seconds for display
 total_seconds = int(duration.total_seconds())
-
 hours = total_seconds // 3600
 minutes = (total_seconds % 3600) // 60
 seconds = total_seconds % 60
