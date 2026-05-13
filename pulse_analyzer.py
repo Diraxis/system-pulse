@@ -30,8 +30,14 @@ start_time = min(timestamps)
 end_time = max(timestamps)
 duration = end_time - start_time
 
+total_seconds = int(duration.total_seconds())
+
+hours = total_seconds // 3600
+minutes = (total_seconds % 3600) // 60
+seconds = total_seconds % 60
+
 # prints summary statistics to the terminal
-print(f"Monitoring duration : {duration}")
+print(f"Monitoring duration : {hours}h {minutes}m {seconds}s")
 print(f"Entries logged : {len(entries)}")
 print(f"Average CPU    : {avg_cpu:.1f}%")
 print(f"Peak CPU       : {max_cpu:.1f}%")
